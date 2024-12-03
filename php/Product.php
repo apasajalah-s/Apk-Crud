@@ -14,16 +14,14 @@ class Product
     public $created;
 
     // Constructor untuk menginisialisasi koneksi database
-    public function __construct($db)
-    {
+    public function __construct($db){
         $this->conn = $db;
     }
 
     //Fungsi untuk mengupdate produk
-    public function update()
-    {
+    public function update(){
         //query untuk update data produk
-        $query = "UPDATE " . $this->table_name . " SET NIK = :NIK, name = :name, price = :price, description = :description, WHERE id = :id";
+        $query = "UPDATE " . $this->table_name . " SET NIK = :NIK, name = :name, price = :price, description = :description WHERE id = :id";
         //Siapkan query
         $stmt = $this->conn->prepare($query);
 
@@ -46,6 +44,16 @@ class Product
             return true;
         }
         return false;
+    }
+
+    // Metode untuk mendapatkan detail produk berdasarkan ID
+    public function getProductDetails($id)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Mengembalikan hasil sebagai array asosiatif
     }
 
     // Fungsi untuk membuat produk baru
@@ -132,11 +140,12 @@ class Product
     }
 
     public function updateFile() {
-        $query = "UPDATE " . $this->table_name . " SET file = :file WHERE id = :id WHERE id = :id" ;
+        $query = "UPDATE " . $this->table_name . " SET file_path = :file WHERE id = :id WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
 
         //Bersihkan data
+        $this->file_path = htmlspecialchars(strip_tags($this->file_path));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
         //bind parameter
@@ -144,6 +153,13 @@ class Product
 
         //Eksekusi query
         return $stmt->execute();
+    }
+
+    public function readAll() {
+        $query = "SELECT id, name, price, description FROM " . $this->table_name . " ORDER BY id ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
     }
 }
 
