@@ -23,5 +23,14 @@ class Database
             echo "Connection error: " . $exception->getMessage(); // Tangkap error koneksi
         }
         return $this->conn; // Kembalikan koneksi
+
+        try {
+            $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $conn;
+        } catch (PDOException $exception) {
+            echo "Connection error: " . $exception->getMessage();
+            return null;
+        }
     }
 }

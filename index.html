@@ -1,3 +1,12 @@
+<?php
+    session_start();
+    
+    if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
+        header("location: login_form.html");
+        exit;
+    }
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -82,6 +91,12 @@
             loadProducts();
         };
 
+        function logout() {
+            if (confirm("Anda yakin ingin logout?")) {
+                window.location.href = "logout.php";
+            }
+        }
+
     </script>
 </head>
 
@@ -103,14 +118,19 @@
             <input type="text" name="price" placeholder="Harga Produk" required><br>
             <textarea name="description" placeholder="Deskripsi Produk" required></textarea><br>
             <button type="submit" style="background-color: green;">Tambah Produk</button>
+            
         </form>
     <div id="message"></div>
-    
+    <button onclick="logout()" style="background-color: red;">Logout</button>
     <div class="center">
         <h1>Daftar Produk</h1>
         <div id="products"></div>
     </div>
+    <a href="php/generate_pdf.php">
+        <button>Cetak PDF</button>
+    </a>
     
 </body>
+
 
 </html>

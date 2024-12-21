@@ -12,6 +12,7 @@ class Product
     public $price;
     public $description;
     public $created;
+    public $file_path;
 
     // Constructor untuk menginisialisasi koneksi database
     public function __construct($db){
@@ -139,19 +140,14 @@ class Product
         return $row['total_rows']; // Kembalikan jumlah total
     }
 
-    public function updateFile() {
-        $query = "UPDATE " . $this->table_name . " SET file_path = :file WHERE id = :id WHERE id = :id";
+    public function updateFile()
+    {
+        $query = "UPDATE " . $this->table_name . " SET file_path = :file_path WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":file_path", $this->file_path);
+        $stmt->bindParam(":id", $this->id);
 
-        //Bersihkan data
-        $this->file_path = htmlspecialchars(strip_tags($this->file_path));
-        $this->id = htmlspecialchars(strip_tags($this->id));
-
-        //bind parameter
-        $stmt->bindParam(':id', $this->id);
-
-        //Eksekusi query
         return $stmt->execute();
     }
 

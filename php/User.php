@@ -1,34 +1,44 @@
 <?php
-
 class User {
-private $conn;
-public $username;
-public $password;
+    private $conn;
+    private $table_name = "users";
 
-public function __construct($db) {
-$this->conn = $db;
+    public $id;
+    public $username;
+    public $password = 'pw123456';
+    public $hashed_password;
+
+    //Constructor untuk menginisialisasi koneksi database
+    public function __construct($db) {
+        $this->conn = $db;
+
+        $this->password = 'pw123456';
+        $this->hashed_password = password_hash($this->password, PASSWORD_DEFAULT);
+    }
+
+    //Fungsi untuk login pengguna
+    public function login() {
+        $query = "SELECT id, username, password FROM " . $this->table_name . " WHERE username = :username LIMIT 0,1";
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->username = htmlspecialchars(strip_tags($this->username));
+
+        $stmt->bindParam(':username', $this->username);
+
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (password_verify($this->password, $row['password'])) {
+                $_SESSION['loggedin'] = true;
+                $_SESSION['username'] = $row['username'];
+                $_SESSION['user_id'] = $row['id'];
+                return true;
+            }
+        }
+        return false;
+    }
 }
-
-public function login() {
-// Query untuk memeriksa apakah username dan password cocok
-$query = "SELECT * FROM users WHERE username = :username AND password = :password";
-
-// Siapkan pernyataan
-$stmt = $this->conn->prepare($query);
-
-// Bind parameter
-$stmt->bindParam(":username", $this->username);
-$stmt->bindParam(":password", $this->password); // Jangan lupa hash password di sini untuk keamanan
-
-// Eksekusi pernyataan
-$stmt->execute();
-
-// Jika ditemukan hasil, berarti login berhasil
-if($stmt->rowCount() > 0) {
-return true;
-}
-return false;
-}
-}
-
-
+?>
