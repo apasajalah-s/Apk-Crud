@@ -39,6 +39,7 @@ if ($num > 0) {
     echo "<th>Nama produk</th>";
     echo "<th>Deskripsi</th>";
     echo "<th>Harga</th>";
+    echo "<th>File PDF</th>";
     echo "<th>Keterangan</th>";
     echo "</tr>";
     echo "</thead>";
@@ -51,6 +52,7 @@ if ($num > 0) {
         echo "<td>{$name}</td>";
         echo "<td>{$description}</td>";
         echo "<td>Rp.{$price}</td>";
+        echo "<td>{$file_path}</td>";
         echo "<td>";
         echo "<button style='background-color: #4caf50; color: black; padding: 5px 10px; border: none; border-radius: 3px; cursor: pointer;' onclick='editProduct({$id})'>Edit</button>";
         echo "<button style='background-color: #f44336; color: black; padding: 5px 10px; border: none; border-radius: 3px; cursor: pointer;'onclick='deleteProduct({$id})'>Hapus</button>";

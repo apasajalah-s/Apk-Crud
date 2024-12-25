@@ -57,7 +57,7 @@ $product_details = $product->getProductDetails($_POST['id']); // Misalnya, Anda 
 
     <!-- Tombol untuk unggah file terbaru -->
     <h3>Unggah File Terbaru</h3>
-    <form action="upload_latest_file.php" method="post" enctype="multipart/form-data">
+    <form action="php/upload_latest_file.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php echo htmlspecialchars($product_details['id']); ?>">
         <label for="file">Pilih file:</label><br>
         <input type="file" name="file" required><br><br>
